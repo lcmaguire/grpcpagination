@@ -1,0 +1,22 @@
+syntax = "proto3";
+package example;
+
+option go_package = "github.com/lcmaguire/grpcpagination/example";
+
+
+service ExampleService {
+    rpc ListExamples(ListExamplesRequest) returns (ListExamplesResponse) {}
+}
+
+message ListExamplesRequest {
+    string page_token = 1;
+}
+
+
+message ListExamplesResponse {
+    string next_page_token = 2;
+}
+
+message Example {
+    int32 num = 1;
+}
