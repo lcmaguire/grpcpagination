@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/lcmaguire/protoc-gen-go-setters/example"
+	"github.com/lcmaguire/grpcpagination/example"
 )
 
 func ExamplePaginateNextToken() {
@@ -13,7 +13,7 @@ func ExamplePaginateNextToken() {
 	res := &example.ListExamplesResponse{
 		NextPageToken: expectedToken,
 	}
-	rpc := mockRpc{res: res}
+	rpc := MockRpc{Res: res}
 	ctx := context.Background()
 
 	req := &example.ListExamplesRequest{}
@@ -31,4 +31,5 @@ func ExamplePaginateNextToken() {
 	// Output:
 	// err will only exist if there is a rpc error <nil>
 	// pages visited 5
+
 }

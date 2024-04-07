@@ -5,7 +5,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/lcmaguire/protoc-gen-go-setters/example"
+	"github.com/lcmaguire/grpcpagination/example"
 	"github.com/stretchr/testify/require"
 	"google.golang.org/grpc"
 )
@@ -19,7 +19,7 @@ func TestPaginateNextToken(t *testing.T) {
 		t.Parallel()
 		req := &example.ListExamplesRequest{}
 		res := &example.ListExamplesResponse{}
-		rpc := mockRpc{res: res}
+		rpc := MockRpc{Res: res}
 		count := 0
 		expectedCount := 1
 		err := PaginateNextToken(ctx, req, rpc.ListExamples, func(ctx context.Context, response *example.ListExamplesResponse) bool {
@@ -37,7 +37,7 @@ func TestPaginateNextToken(t *testing.T) {
 		res := &example.ListExamplesResponse{
 			NextPageToken: expectedToken,
 		}
-		rpc := mockRpc{res: res}
+		rpc := MockRpc{Res: res}
 		count := 0
 		expectedCount := 5
 		err := PaginateNextToken(ctx, req, rpc.ListExamples, func(ctx context.Context, response *example.ListExamplesResponse) bool {
@@ -53,7 +53,7 @@ func TestPaginateNextToken(t *testing.T) {
 		t.Parallel()
 		req := &example.ListExamplesRequest{}
 		expectedErr := errors.New("err")
-		rpc := mockRpc{err: expectedErr}
+		rpc := MockRpc{Err: expectedErr}
 		err := PaginateNextToken(ctx, req, rpc.ListExamples, func(ctx context.Context, response *example.ListExamplesResponse) bool { return false })
 		require.Error(t, err)
 		require.Equal(t, expectedErr, err)
@@ -63,7 +63,7 @@ func TestPaginateNextToken(t *testing.T) {
 		t.Parallel()
 		expectedErr := errors.New("err")
 		req := &example.ListExamplesRequest{}
-		rpc := mockRpc{err: expectedErr}
+		rpc := MockRpc{Err: expectedErr}
 		err := PaginateNextToken(ctx, req, rpc.ListExamples, func(ctx context.Context, response *example.ListExamplesResponse) bool { return false })
 		require.Error(t, err)
 		require.Equal(t, expectedErr, err)
@@ -71,11 +71,11 @@ func TestPaginateNextToken(t *testing.T) {
 
 }
 
-type mockRpc struct {
-	res *example.ListExamplesResponse
-	err error
+type MockRpc struct {
+	Res *example.ListExamplesResponse
+	Err error
 }
 
-func (m *mockRpc) ListExamples(ctx context.Context, in *example.ListExamplesRequest, opts ...grpc.CallOption) (*example.ListExamplesResponse, error) {
-	return m.res, m.err
+func (m *MockRpc) ListExamples(ctx context.Context, in *example.ListExamplesRequest, opts ...grpc.CallOption) (*example.ListExamplesResponse, error) {
+	return m.Res, m.Err
 }

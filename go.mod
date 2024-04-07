@@ -1,4 +1,4 @@
-module github.com/lcmaguire/protoc-gen-go-setters
+module github.com/lcmaguire/grpcpagination
 
 go 1.21
 
